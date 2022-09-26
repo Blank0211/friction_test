@@ -9,7 +9,7 @@ red = pg.Color("#f04c64")
 
 # Display
 width, height = 640, 480
-FPS = 60
+FPS = 120
 win = pg.display.set_mode((width, height))
 pg.display.set_caption("friction")
 clock = pg.time.Clock()
@@ -28,12 +28,18 @@ class Player(pg.sprite.Sprite):
         self.image.fill(red)
 
     def update(self):
+        self.acc = vec2(0, 0)
         keys = pg.key.get_pressed()
 
+        if self.rect.left > width:
+            self.pos.x = 0 - 9
+        if self.rect.right < 0:
+            self.pos.x = width + 9
+
         if keys[pg.K_RIGHT]:
-            self.acc.x += 1
+            self.acc.x += 0.20
         elif keys[pg.K_LEFT]:
-            self.acc.x -= 1
+            self.acc.x -= 0.20
 
         self.vel += self.acc
         self.vel *= self.fric
