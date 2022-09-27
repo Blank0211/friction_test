@@ -27,23 +27,24 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
         self.image.fill(red)
 
-    def update(self):
+    def update(self, dt):
         self.acc = vec2(0, 0)
         keys = pg.key.get_pressed()
 
+        # Redeploy if out of boundaries
         if self.rect.left > width:
             self.pos.x = 0 - 9
         if self.rect.right < 0:
             self.pos.x = width + 9
 
         if keys[pg.K_RIGHT]:
-            self.acc.x += 0.20
+            self.acc.x += 10
         elif keys[pg.K_LEFT]:
-            self.acc.x -= 0.20
+            self.acc.x -= 10
 
         self.vel += self.acc
         self.vel *= self.fric
-        self.pos += self.vel
+        self.pos += self.vel * dt
 
         self.rect.center = (round(self.pos.x), round(self.pos.y))
 
@@ -59,19 +60,21 @@ def main():
 
     running = True
     while running:
+        # limit FPS and get delta time
+        dt = clock.tick(FPS) / 1000
+        
         # Handle events
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
 
         # Update & draw sprites
-        p1.update()
+        p1.update(dt)
         win.fill(black) # Clear background
         p1.draw(win)
 
         # Update Display
         pg.display.update()
-        clock.tick(FPS)
 
     # Post loop
     pg.quit()
