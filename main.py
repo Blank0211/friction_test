@@ -7,22 +7,27 @@ black = (0, 0, 0)
 blue1 = pg.Color("#197bd2")
 red = pg.Color("#f04c64")
 
-# Display
+# Display & surfaces
 width, height = 640, 480
 FPS = 120
 win = pg.display.set_mode((width, height))
 pg.display.set_caption("friction")
 clock = pg.time.Clock()
 
+black_bg = pg.Surface((100, 100))
+black_bg.fill(black)
+
 # Sprites
 class Player(pg.sprite.Sprite):
     def __init__(self, color, size, pos):
+        # Movement & position
         self.pos = vec2(pos)
         self.vel = vec2(0, 0)
         self.acc = vec2(0, 0)
         self.fric = 0.98
         self.max_speed = 8
 
+        # Apppearance
         self.image = pg.Surface(size)
         self.rect = self.image.get_rect(center=pos)
         self.image.fill(red)
@@ -42,10 +47,12 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_LEFT]:
             self.acc.x -= 10
 
+        # Set new position
         self.vel += self.acc
         self.vel *= self.fric
         self.pos += self.vel * dt
 
+        # Move to new position
         self.rect.center = (round(self.pos.x), round(self.pos.y))
 
     def draw(self, win):
@@ -62,6 +69,11 @@ def main():
     while running:
         # limit FPS and get delta time
         dt = clock.tick(FPS) / 1000
+
+        # Clear current rect & append to list
+        dirty_rects = []
+        win.blit(black_bg, p1.rect)
+        dirty_rects.append(p1.rect)
         
         # Handle events
         for event in pg.event.get():
@@ -70,11 +82,13 @@ def main():
 
         # Update & draw sprites
         p1.update(dt)
-        win.fill(black) # Clear background
         p1.draw(win)
 
+        # Add new rect to list
+        dirty_rects.append(p1.rect)
+
         # Update Display
-        pg.display.flip()
+        pg.display.update(dirty_rects)
 
     # Post loop
     pg.quit()
