@@ -74,7 +74,7 @@ def main():
         p1.draw(win)
 
         # Update Display
-        pg.display.update()
+        pg.display.flip()
 
     # Post loop
     pg.quit()
