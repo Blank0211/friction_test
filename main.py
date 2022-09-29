@@ -14,7 +14,7 @@ win = pg.display.set_mode((width, height))
 pg.display.set_caption("friction")
 clock = pg.time.Clock()
 
-black_bg = pg.Surface((100, 100))
+black_bg = pg.Surface((18, 36))
 black_bg.fill(black)
 
 # Sprites
@@ -42,12 +42,13 @@ class Player(pg.sprite.Sprite):
         if self.rect.right < 0:
             self.pos.x = width + 9
 
+        # Controls
         if keys[pg.K_RIGHT]:
             self.acc.x += 10
         elif keys[pg.K_LEFT]:
             self.acc.x -= 10
 
-        # Set new position
+        # Set up new position
         self.vel += self.acc
         self.vel *= self.fric
         self.pos += self.vel * dt
@@ -67,7 +68,7 @@ def main():
 
     running = True
     while running:
-        # limit FPS and get delta time
+        # limit FPS & get delta time
         dt = clock.tick(FPS) / 1000
 
         # Clear current rect & append to list
