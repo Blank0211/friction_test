@@ -2,27 +2,29 @@ import sys
 import pygame as pg
 vec2 = pg.math.Vector2
 
-# Colours
+# ------ Colours ------
 black = (0, 0, 0)
 blue1 = pg.Color("#197bd2")
 red = pg.Color("#f04c64")
 
-# Display
+# ------ Display ------
 width, height = 640, 480
 FPS = 120
 win = pg.display.set_mode((width, height))
 pg.display.set_caption("friction")
 clock = pg.time.Clock()
 
-# Sprites
+# ------ Sprites ------
 class Player(pg.sprite.Sprite):
     def __init__(self, color, size, pos):
+        # Position & Movement
         self.pos = vec2(pos)
         self.vel = vec2(0, 0)
         self.acc = vec2(0, 0)
         self.fric = 0.98
         self.max_speed = 8
 
+        # Appearance & Body
         self.image = pg.Surface(size)
         self.rect = self.image.get_rect(center=pos)
         self.image.fill(red)
@@ -37,15 +39,18 @@ class Player(pg.sprite.Sprite):
         if self.rect.right < 0:
             self.pos.x = width + 9
 
+        # Controls
         if keys[pg.K_RIGHT]:
             self.acc.x += 10
         elif keys[pg.K_LEFT]:
             self.acc.x -= 10
 
+        # Set up new position
         self.vel += self.acc
         self.vel *= self.fric
         self.pos += self.vel * dt
 
+        # Move to new position
         self.rect.center = (round(self.pos.x), round(self.pos.y))
 
     def draw(self, win):
@@ -54,7 +59,7 @@ class Player(pg.sprite.Sprite):
 
 p1 = Player(red, (18, 36), (width//2, height//2))
 
-# Game Loop
+# ------ Game Loop ------
 def main():
     pg.init()
 
