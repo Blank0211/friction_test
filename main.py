@@ -73,7 +73,7 @@ def main():
         # Clear current rect & append to list
         dirty_rects = []
         win.blit(black_bg, p1.rect)
-        dirty_rects.append(p1.rect)
+        dirty_rects.append(p1.rect.copy())
         
         # Handle events
         for event in pg.event.get():
